@@ -1,0 +1,63 @@
+-- This scripts created a fresh table Rooms in MyTest database
+
+USE MyTest;
+
+-- Delete all table. IF EXISTS added to avoid error whilst running the database
+DROP TABLE IF EXISTS Rooms;
+
+-- Create table 'Rooms'
+
+CREATE TABLE
+	Rooms (
+		RoomID		int			IDENTITY(1, 1)	NOT NULL,
+		RoomNumber	char(3)						NOT NULL,
+		BedType		varchar(15)					NOT NULL,
+		Rate		smallmoney					NOT NULL
+		);
+
+-- Insert values into the table
+
+INSERT INTO Rooms (RoomNumber, BedType, Rate)
+	VALUES ('101', 'King', 110),
+		('201', 'King', 110),
+		('232', 'Double', 90),
+		('256', 'Single', 30);
+
+-- Select columns from the table
+
+SELECT * FROM dbo.Rooms
+ORDER BY RoomNumber;
+
+-- Update record
+
+SELECT * FROM RoomReservations
+
+UPDATE RoomReservations
+SET CheckInDate = '2024-05-25'
+WHERE RoomNumber = 201;
+
+-- Delete records
+SELECT * FROM Rooms
+DELETE FROM Rooms
+WHERE RoomID IN (2, 3, 4, 5, 6, 7);
+
+-- See all tables
+
+SELECT * FROM Guests
+SELECT * FROM RoomReservations
+SELECT * FROM Rooms;
+
+-- JOIN tables
+
+SELECT Guests.FirstName,
+	Guests.LastName,
+	RoomReservations.CheckInDate,
+	RoomReservations.CheckOutDate,
+	Rooms.RoomNumber,
+	Rooms.BedType,
+	Rooms.Rate
+FROM Guests
+	INNER JOIN RoomReservations
+	ON Guests.GuestID = RoomReservations.GuestID
+	INNER JOIN Rooms
+	ON RoomReservations.RoomNumber = Rooms.RoomNumber;
